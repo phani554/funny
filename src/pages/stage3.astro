@@ -1,0 +1,281 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CyberLayout from '../layouts/CyberLayout.astro';
+import TypedText from '../components/TypedText.astro';
+import AsciiArt from '../components/AsciiArt.astro';
+
+const baseUrl = import.meta.env.BASE_URL || '/cyber-scavenger-hunt';
+---
+
+<Layout title="Stage 3 - Cyber Scavenger Hunt">
+	<CyberLayout>
+		<div class="terminal-container">
+			<div class="terminal-header">
+				<div class="terminal-title">TERMINAL ACCESS - LEVEL 3</div>
+				<div class="terminal-controls">
+					<span class="control minimize"></span>
+					<span class="control maximize"></span>
+					<span class="control close"></span>
+				</div>
+			</div>
+			
+			<div class="terminal-body">
+				<div class="terminal-line">
+					<span class="prompt">$</span>
+					<TypedText text="./access_level3.sh" delay={500} speed={70} />
+				</div>
+				
+				<div class="terminal-output">
+					<TypedText text="MISSION COMPLETE: TRAINING SUCCESSFUL" delay={2000} speed={30} className="level-title" />
+					
+					<div class="level-content" style="opacity: 0;">
+						<AsciiArt art="trophy" className="ascii-decoration" />
+						
+						<div class="success-section">
+							<p>🎉 <strong>CONGRATULATIONS, RECRUIT!</strong> 🎉</p>
+							<p>"Outstanding work!" Commander Hayes exclaims. "You've successfully completed all the training challenges."</p>
+							<p>"Your problem-solving skills and quick thinking would make you an excellent addition to our cybersecurity team. The Phantoms won't stand a chance against defenders like you."</p>
+							<p>"Remember, in the world of cybersecurity, knowledge is your strongest weapon. Keep learning, stay curious, and always be one step ahead of potential threats."</p>
+						</div>
+						
+						<div class="certificate">
+							<h2>CERTIFICATE OF COMPLETION</h2>
+							<p>This certifies that</p>
+							<p class="certificate-name">CYBER RECRUIT</p>
+							<p>has successfully completed the</p>
+							<p class="certificate-course">CYBER DEFENSE TRAINING SIMULATION</p>
+							<p class="certificate-date">Date: <span id="current-date"></span></p>
+						</div>
+						
+						<div class="next-steps">
+							<h3>WHAT'S NEXT?</h3>
+							<ul>
+								<li>Learn more about cybersecurity concepts</li>
+								<li>Explore other training simulations</li>
+								<li>Share your achievement with friends</li>
+							</ul>
+							<a href={baseUrl + "/"} class="restart-button">RESTART MISSION</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</CyberLayout>
+</Layout>
+
+<style>
+	.terminal-container {
+		width: 100%;
+		max-width: 800px;
+		margin: 0 auto;
+		background-color: var(--terminal-bg);
+		border-radius: 8px;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+		overflow: hidden;
+		animation: glitchIn 1s ease-out;
+	}
+	
+	.terminal-header {
+		background-color: var(--terminal-header);
+		padding: 10px 15px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		border-bottom: 1px solid var(--terminal-dim);
+	}
+	
+	.terminal-title {
+		color: var(--terminal-dim);
+		font-size: 0.9em;
+		font-weight: bold;
+	}
+	
+	.terminal-controls {
+		display: flex;
+		gap: 8px;
+	}
+	
+	.control {
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		display: inline-block;
+	}
+	
+	.minimize {
+		background-color: #f1fa8c;
+	}
+	
+	.maximize {
+		background-color: #50fa7b;
+	}
+	
+	.close {
+		background-color: #ff5555;
+	}
+	
+	.terminal-body {
+		padding: 20px;
+		color: var(--terminal-text);
+		font-family: 'Courier New', monospace;
+		min-height: 400px;
+	}
+	
+	.terminal-line {
+		display: flex;
+		align-items: center;
+		margin-bottom: 15px;
+	}
+	
+	.prompt {
+		color: var(--terminal-success);
+		margin-right: 10px;
+	}
+	
+	.terminal-output {
+		margin-top: 20px;
+	}
+	
+	.level-title {
+		color: var(--terminal-success);
+		font-size: 1.2em;
+		font-weight: bold;
+		margin-bottom: 20px;
+		display: block;
+	}
+	
+	.level-content {
+		transition: opacity 1s ease-in-out;
+	}
+	
+	.ascii-decoration {
+		margin: 20px 0;
+		text-align: center;
+		color: var(--terminal-warning);
+	}
+	
+	.success-section {
+		margin-bottom: 30px;
+		padding: 15px;
+		border-left: 3px solid var(--terminal-success);
+		background-color: rgba(80, 250, 123, 0.05);
+	}
+	
+	.certificate {
+		margin: 40px auto;
+		padding: 30px;
+		max-width: 600px;
+		border: 2px solid var(--terminal-accent);
+		text-align: center;
+		background-color: rgba(139, 233, 253, 0.05);
+	}
+	
+	.certificate h2 {
+		color: var(--terminal-accent);
+		margin-top: 0;
+		font-size: 1.5em;
+		letter-spacing: 2px;
+	}
+	
+	.certificate-name {
+		font-size: 1.3em;
+		color: var(--terminal-warning);
+		margin: 15px 0;
+		font-weight: bold;
+	}
+	
+	.certificate-course {
+		font-size: 1.1em;
+		color: var(--terminal-success);
+		margin: 15px 0;
+	}
+	
+	.certificate-date {
+		margin-top: 20px;
+		font-style: italic;
+		color: var(--terminal-dim);
+	}
+	
+	.next-steps {
+		margin-top: 30px;
+		padding: 15px;
+		border: 1px dashed var(--terminal-dim);
+		border-radius: 4px;
+	}
+	
+	.next-steps h3 {
+		color: var(--terminal-warning);
+		margin-top: 0;
+	}
+	
+	.next-steps ul {
+		padding-left: 20px;
+		margin-bottom: 20px;
+	}
+	
+	.restart-button {
+		display: inline-block;
+		background-color: var(--terminal-dim);
+		color: var(--terminal-text);
+		text-decoration: none;
+		padding: 10px 20px;
+		border-radius: 4px;
+		transition: all 0.3s ease;
+	}
+	
+	.restart-button:hover {
+		background-color: var(--terminal-accent);
+		color: #000;
+	}
+	
+	/* Glitch Animation */
+	@keyframes glitchIn {
+		0% {
+			opacity: 0;
+			clip-path: inset(0 0 100% 0);
+			transform: translateY(50px);
+		}
+		20% {
+			clip-path: inset(33% 0 66% 0);
+		}
+		40% {
+			clip-path: inset(66% 0 33% 0);
+		}
+		60% {
+			clip-path: inset(33% 0 66% 0);
+		}
+		80% {
+			clip-path: inset(10% 0 90% 0);
+		}
+		100% {
+			opacity: 1;
+			clip-path: inset(0 0 0 0);
+			transform: translateY(0);
+		}
+	}
+</style>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		// Set current date for certificate
+		const currentDateElement = document.getElementById('current-date');
+		if (currentDateElement) {
+			const now = new Date();
+			const options = { year: 'numeric', month: 'long', day: 'numeric' };
+			currentDateElement.textContent = now.toLocaleDateString('en-US', options);
+		}
+		
+		// Show level content after title is typed
+		const levelTitle = document.querySelector('.level-title');
+		if (levelTitle) {
+			levelTitle.addEventListener('typingComplete', () => {
+				setTimeout(() => {
+					const levelContent = document.querySelector('.level-content');
+					if (levelContent) {
+						levelContent.style.opacity = '1';
+					}
+				}, 500);
+			});
+		}
+	});
+</script>

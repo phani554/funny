@@ -1,0 +1,69 @@
+---
+export interface Props {
+  art: string;
+  className?: string;
+}
+
+const { art, className = '' } = Astro.props;
+
+// ASCII art collection
+const artCollection = {
+  lock: `
+  .--------.
+ / .------. \\
+/ /        \\ \\
+| |        | |
+| |        | |
+| |        | |
+| |        | |
+| |        | |
+| |        | |
+| '--------' |
+|   _____    |
+|  |     |   |
+|  |     |   |
+|  |_____|   |
+|            |
+|    ____    |
+|   |    |   |
+|   |    |   |
+|   |____|   |
+|            |
+'-----------'
+  `,
+  trophy: `
+       ___________
+      '._==_==_=_.'
+      .-\\:      /-.
+     | (|:.     |) |
+      '-|:.     |-'
+        \\::.    /
+         '::. .'
+           ) (
+         _.' '._
+        '-------'
+  `,
+  computer: `
+     .---.
+    | .-. |
+    | '-' |
+    '---'
+   /:::::\\
+  /:::::::\\
+ '========='
+  `,
+  skull: `
+     _____
+    /     \\
+   | () () |
+    \\  ^  /
+     |||||
+     |||||
+  `
+};
+
+// Get the requested ASCII art or default to an empty string
+const selectedArt = artCollection[art] || '';
+---
+
+<pre class={className}>{selectedArt}</pre>

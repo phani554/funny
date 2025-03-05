@@ -1,0 +1,193 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CyberLayout from '../layouts/CyberLayout.astro';
+import TypedText from '../components/TypedText.astro';
+import PuzzleForm from '../components/PuzzleForm.astro';
+import AsciiArt from '../components/AsciiArt.astro';
+---
+
+<Layout title="Stage 2 - Cyber Scavenger Hunt">
+	<CyberLayout>
+		<div class="terminal-container">
+			<div class="terminal-header">
+				<div class="terminal-title">TERMINAL ACCESS - LEVEL 2</div>
+				<div class="terminal-controls">
+					<span class="control minimize"></span>
+					<span class="control maximize"></span>
+					<span class="control close"></span>
+				</div>
+			</div>
+			
+			<div class="terminal-body">
+				<div class="terminal-line">
+					<span class="prompt">$</span>
+					<TypedText text="./access_level2.sh" delay={500} speed={70} />
+				</div>
+				
+				<div class="terminal-output">
+					<TypedText text="ACCESS GRANTED: LEVEL 2 SECURITY CLEARANCE" delay={2000} speed={30} className="level-title" />
+					
+					<div class="level-content" style="opacity: 0;">
+						<div class="story-section">
+							<p>🔓 <strong>SECURITY CLEARANCE UPGRADED</strong> 🔓</p>
+							<p>"Excellent work, recruit! You've completed the first challenge," Commander Hayes says with an approving nod.</p>
+							<p>"The Phantoms are known for hiding their communications in plain sight. For this next challenge, you'll need to think about how hackers might conceal messages in innocent-looking files."</p>
+						</div>
+						
+						<AsciiArt art="lock" className="ascii-decoration" />
+						
+						<PuzzleForm 
+							id="stage2-puzzle"
+							question="CHALLENGE: The Phantoms hide text inside images to secretly communicate. What is this technique called?"
+							hint="This technique involves embedding data within other data. The name comes from the Greek words for 'covered writing'."
+							answer="steganography"
+							onSuccess="unlockStage3"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</CyberLayout>
+</Layout>
+
+<style>
+	.terminal-container {
+		width: 100%;
+		max-width: 800px;
+		margin: 0 auto;
+		background-color: var(--terminal-bg);
+		border-radius: 8px;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+		overflow: hidden;
+		animation: glitchIn 1s ease-out;
+	}
+	
+	.terminal-header {
+		background-color: var(--terminal-header);
+		padding: 10px 15px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		border-bottom: 1px solid var(--terminal-dim);
+	}
+	
+	.terminal-title {
+		color: var(--terminal-dim);
+		font-size: 0.9em;
+		font-weight: bold;
+	}
+	
+	.terminal-controls {
+		display: flex;
+		gap: 8px;
+	}
+	
+	.control {
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		display: inline-block;
+	}
+	
+	.minimize {
+		background-color: #f1fa8c;
+	}
+	
+	.maximize {
+		background-color: #50fa7b;
+	}
+	
+	.close {
+		background-color: #ff5555;
+	}
+	
+	.terminal-body {
+		padding: 20px;
+		color: var(--terminal-text);
+		font-family: 'Courier New', monospace;
+		min-height: 400px;
+	}
+	
+	.terminal-line {
+		display: flex;
+		align-items: center;
+		margin-bottom: 15px;
+	}
+	
+	.prompt {
+		color: var(--terminal-success);
+		margin-right: 10px;
+	}
+	
+	.terminal-output {
+		margin-top: 20px;
+	}
+	
+	.level-title {
+		color: var(--terminal-success);
+		font-size: 1.2em;
+		font-weight: bold;
+		margin-bottom: 20px;
+		display: block;
+	}
+	
+	.level-content {
+		transition: opacity 1s ease-in-out;
+	}
+	
+	.story-section {
+		margin-bottom: 20px;
+		padding: 15px;
+		border-left: 3px solid var(--terminal-success);
+		background-color: rgba(80, 250, 123, 0.05);
+	}
+	
+	.ascii-decoration {
+		margin: 20px 0;
+		text-align: center;
+		color: var(--terminal-accent);
+	}
+	
+	/* Glitch Animation */
+	@keyframes glitchIn {
+		0% {
+			opacity: 0;
+			clip-path: inset(0 0 100% 0);
+			transform: translateY(50px);
+		}
+		20% {
+			clip-path: inset(33% 0 66% 0);
+		}
+		40% {
+			clip-path: inset(66% 0 33% 0);
+		}
+		60% {
+			clip-path: inset(33% 0 66% 0);
+		}
+		80% {
+			clip-path: inset(10% 0 90% 0);
+		}
+		100% {
+			opacity: 1;
+			clip-path: inset(0 0 0 0);
+			transform: translateY(0);
+		}
+	}
+</style>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		// Show level content after title is typed
+		const levelTitle = document.querySelector('.level-title');
+		if (levelTitle) {
+			levelTitle.addEventListener('typingComplete', () => {
+				setTimeout(() => {
+					const levelContent = document.querySelector('.level-content');
+					if (levelContent) {
+						levelContent.style.opacity = '1';
+					}
+				}, 500);
+			});
+		}
+	});
+</script>

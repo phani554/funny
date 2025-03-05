@@ -1,0 +1,350 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CyberLayout from '../layouts/CyberLayout.astro';
+import TypedText from '../components/TypedText.astro';
+import PuzzleForm from '../components/PuzzleForm.astro';
+
+const baseUrl = import.meta.env.BASE_URL || '/cyber-scavenger-hunt';
+---
+
+<Layout title="Cyber Scavenger Hunt">
+	<CyberLayout>
+		<!-- Intro Video Container -->
+		<div id="intro-video-container" class="video-container">
+			<video id="intro-video" class="fullscreen-video" preload="auto">
+				<source src={`${baseUrl}/intro.mp4`} type="video/mp4">
+				Your browser does not support the video tag.
+			</video>
+			<div class="video-overlay">
+				<button id="skip-intro" class="skip-button">SKIP INTRO</button>
+			</div>
+		</div>
+
+		<!-- Main Content (Hidden initially) -->
+		<div id="main-content" class="hidden">
+			<div class="terminal-container">
+				<div class="terminal-header">
+					<div class="terminal-title">TERMINAL ACCESS</div>
+					<div class="terminal-controls">
+						<span class="control minimize"></span>
+						<span class="control maximize"></span>
+						<span class="control close"></span>
+					</div>
+				</div>
+				
+				<div class="terminal-body">
+					<div class="terminal-line">
+						<span class="prompt">$</span>
+						<TypedText text="./start_mission.sh" delay={500} speed={70} />
+					</div>
+					
+					<div class="terminal-output" id="welcome-message">
+						<TypedText text="MISSION BRIEFING: OPERATION CYBER SHIELD" delay={2000} speed={30} className="welcome-title" />
+						
+						<div class="welcome-content" style="opacity: 0;">
+							<div class="story-section">
+								<p>🔐 <strong>ATTENTION RECRUIT!</strong> 🔐</p>
+								<p>Welcome to your first day at the Cyber Defense Academy. I'm Commander Hayes, your instructor.</p>
+								<p>We've received reports that a hacker group called "The Phantoms" is planning to attack the university's network. As a new recruit, you've been chosen for a special training mission to test your problem-solving skills.</p>
+								<p>This training simulation will prepare you for real cybersecurity challenges. Are you ready to begin?</p>
+							</div>
+							
+							<div class="mission-details">
+								<h3>📋 MISSION DETAILS:</h3>
+								<ul>
+									<li>Complete each challenge to advance to the next stage</li>
+									<li>Use the hints if you get stuck</li>
+									<li>No specialized knowledge required - just your problem-solving skills!</li>
+								</ul>
+							</div>
+							
+							<PuzzleForm 
+								id="start-puzzle"
+								question="FIRST CHALLENGE: The Phantoms often use a type of malicious software that locks users out of their files and demands payment. What is this type of attack called?"
+								hint="Think about software that holds your files for 'ransom'. You might have heard about these attacks on the news when they target hospitals or cities."
+								answer="ransomware"
+								onSuccess="unlockStage2"
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</CyberLayout>
+</Layout>
+
+<style>
+	/* Video Styles */
+	.video-container {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 100;
+		background-color: #000;
+	}
+	
+	.fullscreen-video {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	
+	.video-overlay {
+		position: absolute;
+		bottom: 30px;
+		right: 30px;
+		z-index: 101;
+	}
+	
+	.skip-button {
+		background-color: rgba(0, 0, 0, 0.5);
+		color: white;
+		border: 1px solid rgba(255, 255, 255, 0.3);
+		padding: 8px 16px;
+		cursor: pointer;
+		font-family: 'Courier New', monospace;
+		transition: all 0.3s ease;
+	}
+	
+	.skip-button:hover {
+		background-color: rgba(139, 233, 253, 0.2);
+		border-color: var(--terminal-accent);
+	}
+	
+	.hidden {
+		display: none;
+	}
+	
+	/* Terminal Styles */
+	.terminal-container {
+		width: 100%;
+		max-width: 800px;
+		margin: 0 auto;
+		background-color: var(--terminal-bg);
+		border-radius: 8px;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+		overflow: hidden;
+		animation: glitchIn 1s ease-out;
+	}
+	
+	.terminal-header {
+		background-color: var(--terminal-header);
+		padding: 10px 15px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		border-bottom: 1px solid var(--terminal-dim);
+	}
+	
+	.terminal-title {
+		color: var(--terminal-dim);
+		font-size: 0.9em;
+		font-weight: bold;
+	}
+	
+	.terminal-controls {
+		display: flex;
+		gap: 8px;
+	}
+	
+	.control {
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		display: inline-block;
+	}
+	
+	.minimize {
+		background-color: #f1fa8c;
+	}
+	
+	.maximize {
+		background-color: #50fa7b;
+	}
+	
+	.close {
+		background-color: #ff5555;
+	}
+	
+	.terminal-body {
+		padding: 20px;
+		color: var(--terminal-text);
+		font-family: 'Courier New', monospace;
+		min-height: 400px;
+	}
+	
+	.terminal-line {
+		display: flex;
+		align-items: center;
+		margin-bottom: 15px;
+	}
+	
+	.prompt {
+		color: var(--terminal-success);
+		margin-right: 10px;
+	}
+	
+	.terminal-output {
+		margin-top: 20px;
+	}
+	
+	.welcome-title {
+		color: var(--terminal-accent);
+		font-size: 1.2em;
+		font-weight: bold;
+		margin-bottom: 20px;
+		display: block;
+	}
+	
+	.welcome-content {
+		transition: opacity 1s ease-in-out;
+	}
+	
+	.story-section {
+		margin-bottom: 20px;
+		padding: 15px;
+		border-left: 3px solid var(--terminal-accent);
+		background-color: rgba(139, 233, 253, 0.05);
+	}
+	
+	.mission-details {
+		margin-bottom: 20px;
+		padding: 15px;
+		border: 1px dashed var(--terminal-dim);
+		border-radius: 4px;
+	}
+	
+	.mission-details h3 {
+		color: var(--terminal-warning);
+		margin-top: 0;
+	}
+	
+	.mission-details ul {
+		padding-left: 20px;
+	}
+	
+	/* Glitch Animation */
+	@keyframes glitchIn {
+		0% {
+			opacity: 0;
+			clip-path: inset(0 0 100% 0);
+			transform: translateY(50px);
+		}
+		20% {
+			clip-path: inset(33% 0 66% 0);
+		}
+		40% {
+			clip-path: inset(66% 0 33% 0);
+		}
+		60% {
+			clip-path: inset(33% 0 66% 0);
+		}
+		80% {
+			clip-path: inset(10% 0 90% 0);
+		}
+		100% {
+			opacity: 1;
+			clip-path: inset(0 0 0 0);
+			transform: translateY(0);
+		}
+	}
+</style>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		// Video handling
+		const introVideo = document.getElementById('intro-video');
+		const introContainer = document.getElementById('intro-video-container');
+		const mainContent = document.getElementById('main-content');
+		const skipButton = document.getElementById('skip-intro');
+		
+		// Show main content immediately for testing
+		if (mainContent && introContainer) {
+			introContainer.classList.add('hidden');
+			mainContent.classList.remove('hidden');
+		}
+		
+		// Function to show main content
+		const showMainContent = () => {
+			// Add glitch transition effect
+			document.body.classList.add('glitch-transition');
+			
+			// Hide video container
+			if (introContainer) {
+				introContainer.style.opacity = '0';
+				setTimeout(() => {
+					introContainer.classList.add('hidden');
+					// Show main content
+					if (mainContent) {
+						mainContent.classList.remove('hidden');
+					}
+					document.body.classList.remove('glitch-transition');
+				}, 1000);
+			}
+		};
+		
+		// Skip button event
+		if (skipButton) {
+			skipButton.addEventListener('click', () => {
+				if (introVideo) {
+					introVideo.pause();
+				}
+				showMainContent();
+			});
+		}
+		
+		// Video ended event
+		if (introVideo) {
+			introVideo.addEventListener('ended', showMainContent);
+			
+			// Auto-play video if possible
+			introVideo.play().catch(error => {
+				console.log('Auto-play prevented:', error);
+				// If auto-play is prevented, show a play button
+				if (introContainer) {
+					const playButton = document.createElement('button');
+					playButton.innerText = 'START MISSION';
+					playButton.className = 'play-button';
+					playButton.style.position = 'absolute';
+					playButton.style.top = '50%';
+					playButton.style.left = '50%';
+					playButton.style.transform = 'translate(-50%, -50%)';
+					playButton.style.padding = '15px 30px';
+					playButton.style.backgroundColor = 'rgba(139, 233, 253, 0.2)';
+					playButton.style.color = 'white';
+					playButton.style.border = '1px solid var(--terminal-accent)';
+					playButton.style.cursor = 'pointer';
+					playButton.style.fontFamily = 'Courier New, monospace';
+					playButton.style.fontSize = '1.2em';
+					playButton.style.zIndex = '102';
+					
+					playButton.addEventListener('click', () => {
+						introVideo.play().then(() => {
+							playButton.remove();
+						}).catch(() => {
+							// If still can't play, just show the main content
+							showMainContent();
+						});
+					});
+					
+					introContainer.appendChild(playButton);
+				}
+			});
+		}
+		
+		// Show welcome content after title is typed
+		const welcomeTitle = document.querySelector('.welcome-title');
+		if (welcomeTitle) {
+			welcomeTitle.addEventListener('typingComplete', () => {
+				setTimeout(() => {
+					const welcomeContent = document.querySelector('.welcome-content');
+					if (welcomeContent) {
+						welcomeContent.style.opacity = '1';
+					}
+				}, 500);
+			});
+		}
+	});
+</script>

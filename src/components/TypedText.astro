@@ -1,0 +1,50 @@
+---
+---
+<script>
+  if (!customElements.get('typed-text')) {
+    class TypedTextElement extends HTMLElement {
+      constructor() {
+        super();
+        this.text = this.getAttribute('data-text') || '';
+        this.delay = parseInt(this.getAttribute('data-delay') || '0', 10);
+        this.speed = parseInt(this.getAttribute('data-speed') || '50', 10);
+        this.currentIndex = 0;
+        this.isTyping = false;
+      }
+      
+      connectedCallback() {
+        setTimeout(() => this.startTyping(), this.delay);
+      }
+      
+      startTyping() {
+        if (this.isTyping) return;
+        this.isTyping = true;
+        
+        const typeNextChar = () => {
+          if (this.currentIndex < this.text.length) {
+            this.textContent += this.text.charAt(this.currentIndex);
+            this.currentIndex++;
+            setTimeout(typeNextChar, this.speed);
+          } else {
+            this.isTyping = false;
+            // Dispatch event when typing is complete
+            const event = new CustomEvent('typingComplete', { bubbles: true });
+            this.dispatchEvent(event);
+          }
+        };
+        
+        typeNextChar();
+      }
+    }
+    
+    // Define the custom element
+    customElements.define('typed-text', TypedTextElement);
+  }
+</script>
+
+<typed-text 
+  data-text={Astro.props.text} 
+  data-delay={Astro.props.delay || 0} 
+  data-speed={Astro.props.speed || 50}
+  class={Astro.props.className || ''}
+></typed-text>
