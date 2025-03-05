@@ -1,69 +1,87 @@
 ---
-export interface Props {
-  art: string;
-  className?: string;
+interface Props {
+	placeholder: string;
 }
 
-const { art, className = '' } = Astro.props;
-
-// ASCII art collection
-const artCollection = {
-  lock: `
-  .--------.
- / .------. \\
-/ /        \\ \\
-| |        | |
-| |        | |
-| |        | |
-| |        | |
-| |        | |
-| |        | |
-| '--------' |
-|   _____    |
-|  |     |   |
-|  |     |   |
-|  |_____|   |
-|            |
-|    ____    |
-|   |    |   |
-|   |    |   |
-|   |____|   |
-|            |
-'-----------'
-  `,
-  trophy: `
-       ___________
-      '._==_==_=_.'
-      .-\\:      /-.
-     | (|:.     |) |
-      '-|:.     |-'
-        \\::.    /
-         '::. .'
-           ) (
-         _.' '._
-        '-------'
-  `,
-  computer: `
-     .---.
-    | .-. |
-    | '-' |
-    '---'
-   /:::::\\
-  /:::::::\\
- '========='
-  `,
-  skull: `
-     _____
-    /     \\
-   | () () |
-    \\  ^  /
-     |||||
-     |||||
-  `
-};
-
-// Get the requested ASCII art or default to an empty string
-const selectedArt = artCollection[art] || '';
+const { placeholder } = Astro.props;
 ---
 
-<pre class={className}>{selectedArt}</pre>
+<div class="ascii-art-container">
+	<div class="ascii-art">
+		<pre>
+   _____      _               _____                                             
+  / ____|    | |             / ____|                                            
+ | |    _   _| |__   ___ _ _| (___   ___ __ ___   _____ _ __   __ _  ___ _ __  
+ | |   | | | | '_ \ / _ \ '__\___ \ / __/ _` \ \ / / _ \ '_ \ / _` |/ _ \ '__| 
+ | |___| |_| | |_) |  __/ |  ____) | (_| (_| |\ V /  __/ | | | (_| |  __/ |    
+  \_____\__, |_.__/ \___|_| |_____/ \___\__,_| \_/ \___|_| |_|\__, |\___|_|    
+         __/ |                                                  __/ |           
+        |___/                                                  |___/            
+		</pre>
+		<div class="placeholder">{placeholder}</div>
+	</div>
+</div>
+
+<style>
+	.ascii-art-container {
+		margin: 20px 0;
+		width: 100%;
+	}
+	
+	.ascii-art {
+		position: relative;
+		width: 100%;
+		background-color: rgba(0, 0, 0, 0.3);
+		border: 1px solid var(--terminal-dim);
+		border-radius: 4px;
+		padding: 15px;
+		overflow-x: auto;
+		animation: glitchText 2s infinite alternate;
+	}
+	
+	.ascii-art pre {
+		color: var(--terminal-accent);
+		font-size: 0.7em;
+		line-height: 1.2;
+		margin: 0;
+		text-align: center;
+	}
+	
+	.placeholder {
+		text-align: center;
+		color: var(--terminal-dim);
+		font-style: italic;
+		margin-top: 10px;
+		font-size: 0.9em;
+	}
+	
+	@keyframes glitchText {
+		0% {
+			text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+		}
+		14% {
+			text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.05em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+		}
+		15% {
+			text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+		}
+		49% {
+			text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75), 0.025em 0.025em 0 rgba(0, 255, 0, 0.75), -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+		}
+		50% {
+			text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75);
+		}
+		99% {
+			text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75), 0.05em 0 0 rgba(0, 255, 0, 0.75), 0 -0.05em 0 rgba(0, 0, 255, 0.75);
+		}
+		100% {
+			text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.025em 0 rgba(0, 255, 0, 0.75), -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
+		}
+	}
+	
+	@media (min-width: 768px) {
+		.ascii-art pre {
+			font-size: 0.9em;
+		}
+	}
+</style>

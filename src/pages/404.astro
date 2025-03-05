@@ -2,8 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import CyberLayout from '../layouts/CyberLayout.astro';
 import TypedText from '../components/TypedText.astro';
-
-const baseUrl = import.meta.env.BASE_URL || '/cyber-scavenger-hunt';
 ---
 
 <Layout title="404 - Page Not Found">
@@ -44,7 +42,7 @@ const baseUrl = import.meta.env.BASE_URL || '/cyber-scavenger-hunt';
 						<div class="error-actions">
 							<p>Recommended actions:</p>
 							<ul>
-								<li>Return to <a href={baseUrl + "/"} class="action-link">Mission Control</a></li>
+								<li>Return to <a href="/" class="action-link">Mission Control</a></li>
 								<li>Check if you typed the URL correctly</li>
 								<li>Contact your mission commander if you believe this is an error</li>
 							</ul>

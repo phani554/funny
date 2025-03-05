@@ -1,249 +1,288 @@
 ---
-export interface Props {
-  id: string;
-  question: string;
-  hint: string;
-  answer: string;
-  onSuccess: string;
+interface Props {
+	id: string;
+	question: string;
+	hint?: string;
+	answer: string;
+	onSuccess?: string;
 }
 
 const { id, question, hint, answer, onSuccess } = Astro.props;
-const baseUrl = import.meta.env.BASE_URL || '/cyber-scavenger-hunt';
 ---
 
-<div class="puzzle-form" id={id}>
-  <div class="puzzle-question">
-    <p>{question}</p>
-  </div>
-  
-  <div class="puzzle-input-container">
-    <input type="text" class="puzzle-input" placeholder="Enter your answer..." />
-    <button class="puzzle-submit">SUBMIT</button>
-  </div>
-  
-  <div class="puzzle-hint-container">
-    <button class="hint-toggle">SHOW HINT</button>
-    <div class="puzzle-hint hidden">
-      <p>{hint}</p>
-    </div>
-  </div>
-  
-  <div class="puzzle-feedback hidden"></div>
+<div class="puzzle-form" data-id={id} data-answer={answer} data-success={onSuccess}>
+	<div class="puzzle-question">
+		<p>{question}</p>
+	</div>
+	
+	{hint && (
+		<div class="hint-container">
+			<button class="hint-toggle">Need a hint?</button>
+			<div class="hint-content hidden">
+				<p>{hint}</p>
+			</div>
+		</div>
+	)}
+	
+	<div class="answer-form">
+		<input type="text" class="answer-input" placeholder="Enter your answer..." autocomplete="off" />
+		<button class="submit-btn">Submit</button>
+	</div>
+	
+	<div class="feedback-message hidden"></div>
 </div>
 
 <style>
-  .puzzle-form {
-    margin: 30px 0;
-    padding: 20px;
-    border: 1px solid var(--terminal-dim);
-    border-radius: 4px;
-    background-color: rgba(30, 31, 41, 0.5);
-  }
-  
-  .puzzle-question {
-    margin-bottom: 20px;
-  }
-  
-  .puzzle-input-container {
-    display: flex;
-    margin-bottom: 15px;
-  }
-  
-  .puzzle-input {
-    flex: 1;
-    background-color: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--terminal-dim);
-    color: var(--terminal-text);
-    padding: 10px;
-    font-family: 'Courier New', monospace;
-  }
-  
-  .puzzle-input:focus {
-    outline: none;
-    border-color: var(--terminal-accent);
-  }
-  
-  .puzzle-submit {
-    background-color: var(--terminal-dim);
-    color: var(--terminal-text);
-    border: none;
-    padding: 10px 15px;
-    margin-left: 10px;
-    cursor: pointer;
-    font-family: 'Courier New', monospace;
-    transition: all 0.3s ease;
-  }
-  
-  .puzzle-submit:hover {
-    background-color: var(--terminal-accent);
-    color: #000;
-  }
-  
-  .puzzle-hint-container {
-    margin-bottom: 15px;
-  }
-  
-  .hint-toggle {
-    background-color: transparent;
-    color: var(--terminal-warning);
-    border: 1px solid var(--terminal-warning);
-    padding: 5px 10px;
-    font-size: 0.8em;
-    cursor: pointer;
-    font-family: 'Courier New', monospace;
-    transition: all 0.3s ease;
-  }
-  
-  .hint-toggle:hover {
-    background-color: rgba(241, 250, 140, 0.1);
-  }
-  
-  .puzzle-hint {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: rgba(241, 250, 140, 0.05);
-    border-left: 3px solid var(--terminal-warning);
-  }
-  
-  .puzzle-feedback {
-    padding: 10px;
-    margin-top: 15px;
-    border-radius: 4px;
-  }
-  
-  .puzzle-feedback.success {
-    background-color: rgba(80, 250, 123, 0.1);
-    border: 1px solid var(--terminal-success);
-    color: var(--terminal-success);
-  }
-  
-  .puzzle-feedback.error {
-    background-color: rgba(255, 85, 85, 0.1);
-    border: 1px solid var(--terminal-error);
-    color: var(--terminal-error);
-  }
-  
-  .hidden {
-    display: none;
-  }
-  
-  /* Glitch effect for success */
-  @keyframes successGlitch {
-    0% {
-      text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
-                  -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
-                  -0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
-    }
-    14% {
-      text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
-                  -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
-                  -0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
-    }
-    15% {
-      text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
-                  0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
-                  -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
-    }
-    49% {
-      text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
-                  0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
-                  -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
-    }
-    50% {
-      text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
-                  0.05em 0 0 rgba(0, 255, 0, 0.75),
-                  0 -0.05em 0 rgba(0, 0, 255, 0.75);
-    }
-    99% {
-      text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
-                  0.05em 0 0 rgba(0, 255, 0, 0.75),
-                  0 -0.05em 0 rgba(0, 0, 255, 0.75);
-    }
-    100% {
-      text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75),
-                  -0.025em -0.025em 0 rgba(0, 255, 0, 0.75),
-                  -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
-    }
-  }
+	.puzzle-form {
+		margin: 20px 0;
+		padding: 15px;
+		border: 1px solid var(--terminal-dim);
+		border-radius: 4px;
+		background-color: rgba(0, 0, 0, 0.2);
+	}
+	
+	.puzzle-question {
+		margin-bottom: 15px;
+	}
+	
+	.hint-container {
+		margin-bottom: 15px;
+	}
+	
+	.hint-toggle {
+		background: none;
+		border: none;
+		color: var(--terminal-warning);
+		cursor: pointer;
+		font-family: inherit;
+		font-size: 0.9em;
+		padding: 0;
+		text-decoration: underline;
+		transition: color 0.3s;
+	}
+	
+	.hint-toggle:hover {
+		color: var(--terminal-accent);
+	}
+	
+	.hint-content {
+		margin-top: 10px;
+		padding: 10px;
+		background-color: rgba(241, 250, 140, 0.1);
+		border-left: 3px solid var(--terminal-warning);
+		font-size: 0.9em;
+	}
+	
+	.answer-form {
+		display: flex;
+		gap: 10px;
+	}
+	
+	.answer-input {
+		flex: 1;
+		background-color: rgba(0, 0, 0, 0.3);
+		border: 1px solid var(--terminal-dim);
+		border-radius: 4px;
+		color: var(--terminal-text);
+		font-family: 'Courier New', monospace;
+		padding: 8px 12px;
+		transition: border-color 0.3s;
+	}
+	
+	.answer-input:focus {
+		outline: none;
+		border-color: var(--terminal-accent);
+	}
+	
+	.submit-btn {
+		background-color: var(--terminal-dim);
+		border: none;
+		border-radius: 4px;
+		color: var(--terminal-text);
+		cursor: pointer;
+		font-family: 'Courier New', monospace;
+		padding: 8px 16px;
+		transition: background-color 0.3s;
+	}
+	
+	.submit-btn:hover {
+		background-color: var(--terminal-accent);
+	}
+	
+	.feedback-message {
+		margin-top: 15px;
+		padding: 10px;
+		border-radius: 4px;
+		font-size: 0.9em;
+	}
+	
+	.feedback-message.success {
+		background-color: rgba(80, 250, 123, 0.1);
+		border: 1px solid var(--terminal-success);
+		color: var(--terminal-success);
+	}
+	
+	.feedback-message.error {
+		background-color: rgba(255, 85, 85, 0.1);
+		border: 1px solid var(--terminal-error);
+		color: var(--terminal-error);
+	}
+	
+	.hidden {
+		display: none;
+	}
+	
+	/* Glitch effect for success */
+	.puzzle-form.solved {
+		animation: solvedGlitch 1s ease-out;
+		border-color: var(--terminal-success);
+	}
+	
+	@keyframes solvedGlitch {
+		0% {
+			transform: translateX(0);
+		}
+		20% {
+			transform: translateX(-5px);
+		}
+		40% {
+			transform: translateX(5px);
+		}
+		60% {
+			transform: translateX(-3px);
+		}
+		80% {
+			transform: translateX(3px);
+		}
+		100% {
+			transform: translateX(0);
+		}
+	}
 </style>
 
-<script define:vars={{ id, answer, onSuccess, baseUrl }}>
-  document.addEventListener('DOMContentLoaded', () => {
-    const puzzleForm = document.getElementById(id);
-    if (!puzzleForm) return;
-    
-    const input = puzzleForm.querySelector('.puzzle-input');
-    const submitBtn = puzzleForm.querySelector('.puzzle-submit');
-    const hintToggle = puzzleForm.querySelector('.hint-toggle');
-    const hint = puzzleForm.querySelector('.puzzle-hint');
-    const feedback = puzzleForm.querySelector('.puzzle-feedback');
-    
-    // Toggle hint visibility
-    if (hintToggle && hint) {
-      hintToggle.addEventListener('click', () => {
-        hint.classList.toggle('hidden');
-        hintToggle.textContent = hint.classList.contains('hidden') ? 'SHOW HINT' : 'HIDE HINT';
-      });
-    }
-    
-    // Handle form submission
-    if (submitBtn && input && feedback) {
-      submitBtn.addEventListener('click', () => {
-        const userAnswer = input.value.trim().toLowerCase();
-        
-        if (userAnswer === answer.toLowerCase()) {
-          // Success
-          feedback.textContent = 'CORRECT! Access granted. Proceeding to next stage...';
-          feedback.classList.add('success');
-          feedback.classList.remove('error', 'hidden');
-          
-          // Apply success effects
-          puzzleForm.style.animation = 'successGlitch 0.3s ease forwards';
-          
-          // Trigger success callback
-          if (onSuccess === 'unlockStage2') {
-            setTimeout(() => {
-              window.location.href = `${baseUrl}/stage2/`;
-            }, 2000);
-          } else if (onSuccess === 'unlockStage3') {
-            setTimeout(() => {
-              window.location.href = `${baseUrl}/stage3/`;
-            }, 2000);
-          }
-        } else {
-          // Error
-          feedback.textContent = 'INCORRECT. Access denied. Try again.';
-          feedback.classList.add('error');
-          feedback.classList.remove('success', 'hidden');
-          
-          // Shake effect for error
-          input.style.animation = 'shake 0.5s ease';
-          setTimeout(() => {
-            input.style.animation = '';
-          }, 500);
-        }
-      });
-      
-      // Allow Enter key to submit
-      input.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          submitBtn.click();
-        }
-      });
-    }
-  });
-  
-  // Add shake animation
-  if (!document.querySelector('#shake-keyframes')) {
-    const style = document.createElement('style');
-    style.id = 'shake-keyframes';
-    style.textContent = `
-      @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        20%, 60% { transform: translateX(-5px); }
-        40%, 80% { transform: translateX(5px); }
-      }
-    `;
-    document.head.appendChild(style);
-  }
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const puzzleForms = document.querySelectorAll('.puzzle-form');
+		
+		puzzleForms.forEach(form => {
+			const id = form.getAttribute('data-id');
+			const correctAnswer = form.getAttribute('data-answer')?.toLowerCase();
+			const successAction = form.getAttribute('data-success');
+			
+			const hintToggle = form.querySelector('.hint-toggle');
+			const hintContent = form.querySelector('.hint-content');
+			const answerInput = form.querySelector('.answer-input');
+			const submitBtn = form.querySelector('.submit-btn');
+			const feedbackMessage = form.querySelector('.feedback-message');
+			
+			// Check if puzzle was already solved
+			const isSolved = localStorage.getItem(`puzzle_${id}`) === 'solved';
+			if (isSolved) {
+				form.classList.add('solved');
+				if (answerInput) answerInput.disabled = true;
+				if (submitBtn) submitBtn.disabled = true;
+				if (feedbackMessage) {
+					feedbackMessage.textContent = 'You already solved this puzzle!';
+					feedbackMessage.classList.remove('hidden');
+					feedbackMessage.classList.add('success');
+				}
+			}
+			
+			// Toggle hint visibility
+			if (hintToggle && hintContent) {
+				hintToggle.addEventListener('click', () => {
+					hintContent.classList.toggle('hidden');
+					hintToggle.textContent = hintContent.classList.contains('hidden') ? 
+						'Need a hint?' : 'Hide hint';
+				});
+			}
+			
+			// Handle form submission
+			if (submitBtn && answerInput && feedbackMessage) {
+				submitBtn.addEventListener('click', () => {
+					const userAnswer = answerInput.value.trim().toLowerCase();
+					
+					if (userAnswer === '') {
+						feedbackMessage.textContent = 'Please enter an answer.';
+						feedbackMessage.classList.remove('hidden', 'success');
+						feedbackMessage.classList.add('error');
+						return;
+					}
+					
+					if (userAnswer === correctAnswer) {
+						// Mark as solved
+						localStorage.setItem(`puzzle_${id}`, 'solved');
+						
+						// Update UI
+						form.classList.add('solved');
+						answerInput.disabled = true;
+						submitBtn.disabled = true;
+						feedbackMessage.textContent = 'Correct! Well done.';
+						feedbackMessage.classList.remove('hidden', 'error');
+						feedbackMessage.classList.add('success');
+						
+						// Dispatch event for puzzle solved
+						const solvedEvent = new CustomEvent('puzzleSolved', {
+							detail: { puzzleId: id }
+						});
+						document.dispatchEvent(solvedEvent);
+						
+						// Execute success action if provided
+						if (successAction && typeof window[successAction] === 'function') {
+							window[successAction](id);
+						}
+					} else {
+						// Show error
+						feedbackMessage.textContent = 'Incorrect. Try again.';
+						feedbackMessage.classList.remove('hidden', 'success');
+						feedbackMessage.classList.add('error');
+						
+						// Add shake effect
+						answerInput.classList.add('shake');
+						setTimeout(() => {
+							answerInput.classList.remove('shake');
+						}, 500);
+					}
+				});
+				
+				// Allow Enter key to submit
+				answerInput.addEventListener('keypress', (e) => {
+					if (e.key === 'Enter') {
+						submitBtn.click();
+					}
+				});
+			}
+		});
+		
+		// Function to navigate to next stage
+		window.unlockStage2 = () => {
+			setTimeout(() => {
+				window.location.href = '/stage2';
+			}, 2000);
+		};
+		
+		window.unlockStage3 = () => {
+			setTimeout(() => {
+				window.location.href = '/stage3';
+			}, 2000);
+		};
+	});
 </script>
+
+<style is:global>
+	.shake {
+		animation: shake 0.5s ease-in-out;
+	}
+	
+	@keyframes shake {
+		0%, 100% {
+			transform: translateX(0);
+		}
+		20%, 60% {
+			transform: translateX(-5px);
+		}
+		40%, 80% {
+			transform: translateX(5px);
+		}
+	}
+</style>

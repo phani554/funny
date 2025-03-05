@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import CyberLayout from '../layouts/CyberLayout.astro';
 import TypedText from '../components/TypedText.astro';
 import PuzzleForm from '../components/PuzzleForm.astro';
+import MaskedImage from '../components/MaskedImage.astro';
 import AsciiArt from '../components/AsciiArt.astro';
 ---
 
@@ -10,7 +11,7 @@ import AsciiArt from '../components/AsciiArt.astro';
 	<CyberLayout>
 		<div class="terminal-container">
 			<div class="terminal-header">
-				<div class="terminal-title">TERMINAL ACCESS - LEVEL 2</div>
+				<div class="terminal-title">MISSION: STAGE 2</div>
 				<div class="terminal-controls">
 					<span class="control minimize"></span>
 					<span class="control maximize"></span>
@@ -21,28 +22,82 @@ import AsciiArt from '../components/AsciiArt.astro';
 			<div class="terminal-body">
 				<div class="terminal-line">
 					<span class="prompt">$</span>
-					<TypedText text="./access_level2.sh" delay={500} speed={70} />
+					<TypedText text="./continue_mission.sh" delay={500} speed={70} />
 				</div>
 				
-				<div class="terminal-output">
-					<TypedText text="ACCESS GRANTED: LEVEL 2 SECURITY CLEARANCE" delay={2000} speed={30} className="level-title" />
+				<div class="terminal-output" id="stage2-content">
+					<TypedText text="MISSION UPDATE: THE PHANTOM'S SECRET MESSAGE" delay={2000} speed={30} className="stage-title" />
 					
-					<div class="level-content" style="opacity: 0;">
+					<div class="stage-content" style="opacity: 0;">
 						<div class="story-section">
-							<p>🔓 <strong>SECURITY CLEARANCE UPGRADED</strong> 🔓</p>
-							<p>"Excellent work, recruit! You've completed the first challenge," Commander Hayes says with an approving nod.</p>
-							<p>"The Phantoms are known for hiding their communications in plain sight. For this next challenge, you'll need to think about how hackers might conceal messages in innocent-looking files."</p>
+							<p>🔓 <strong>EXCELLENT WORK, RECRUIT!</strong> 🔓</p>
+							<p>"Great job identifying ransomware," says Commander Hayes. "We've intercepted a secret message from The Phantoms, but it's encrypted. We need your help to decode it."</p>
+							<p>The commander shows you a strange-looking image on the screen. "This image contains three layers of encryption. Solve each puzzle to reveal a piece of the image."</p>
 						</div>
 						
-						<AsciiArt art="lock" className="ascii-decoration" />
+						<div class="mission-objective">
+							<h3>🎯 MISSION OBJECTIVE:</h3>
+							<p>Decode The Phantom's secret message by solving the puzzles below. Each correct answer will reveal part of the hidden image.</p>
+						</div>
 						
-						<PuzzleForm 
-							id="stage2-puzzle"
-							question="CHALLENGE: The Phantoms hide text inside images to secretly communicate. What is this technique called?"
-							hint="This technique involves embedding data within other data. The name comes from the Greek words for 'covered writing'."
-							answer="steganography"
-							onSuccess="unlockStage3"
-						/>
+						<MaskedImage placeholder="[ENCRYPTED IMAGE]" revealStages={3} />
+						
+						<!-- Puzzle Container - Only one puzzle visible at a time -->
+						<div class="puzzle-container">
+							<!-- Puzzle 1 -->
+							<div id="puzzle-1" class="puzzle-slide active">
+								<div class="puzzle-number">PUZZLE 1/3</div>
+								<AsciiArt placeholder="Decrypting Layer 1..." />
+								<PuzzleForm 
+									id="cipher-puzzle"
+									question="The Phantoms have encoded a message using a simple letter-shifting technique. If A becomes Y, B becomes Z, and C becomes A, what does this message say? 'QFZQIB XFQE ZXBPLJ'"
+									hint="This is a Caesar cipher with a shift of 2 letters backward. Try writing out the alphabet and shifting each letter in the message."
+									answer="people with caesar"
+									onSuccess="nextPuzzle"
+								/>
+							</div>
+							
+							<!-- Puzzle 2 -->
+							<div id="puzzle-2" class="puzzle-slide">
+								<div class="puzzle-number">PUZZLE 2/3</div>
+								<AsciiArt placeholder="Decrypting Layer 2..." />
+								<PuzzleForm 
+									id="hash-puzzle"
+									question="The Phantoms use a common password hashing technique. What's the name of the algorithm that creates a 128-bit 'digital fingerprint' and is often shown as 32 hexadecimal characters?"
+									hint="This algorithm's name starts with 'M' and ends with '5'. It's considered outdated for password storage but is still commonly referenced in cybersecurity basics."
+									answer="md5"
+									onSuccess="nextPuzzle"
+								/>
+							</div>
+							
+							<!-- Puzzle 3 -->
+							<div id="puzzle-3" class="puzzle-slide">
+								<div class="puzzle-number">PUZZLE 3/3</div>
+								<AsciiArt placeholder="Decrypting Final Layer..." />
+								<PuzzleForm 
+									id="key-puzzle"
+									question="The Phantoms use a system where messages are locked with one key and unlocked with a different key. In this system, which key can be safely shared with everyone?"
+									hint="This is about public key cryptography. One key is kept secret, while the other can be freely distributed to anyone who wants to send you an encrypted message."
+									answer="public key"
+									onSuccess="showFinalPuzzle"
+								/>
+							</div>
+						</div>
+						
+						<div id="final-puzzle" class="hidden">
+							<div class="success-message">
+								<p>🔓 <strong>IMAGE DECRYPTED!</strong> 🔓</p>
+								<p>"Impressive work!" Commander Hayes exclaims. "The image reveals that The Phantoms are planning to use a technique where they pretend to be a legitimate website to steal login credentials."</p>
+							</div>
+							
+							<PuzzleForm 
+								id="final-stage2-puzzle"
+								question="FINAL CHALLENGE: What is the name of this attack where hackers create fake websites that look identical to real ones in order to steal user information?"
+								hint="This type of attack is named after a fishing activity, but with a different spelling. Hackers are 'fishing' for your personal information."
+								answer="phishing"
+								onSuccess="unlockStage3"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -123,29 +178,75 @@ import AsciiArt from '../components/AsciiArt.astro';
 		margin-top: 20px;
 	}
 	
-	.level-title {
-		color: var(--terminal-success);
+	.stage-title {
+		color: var(--terminal-accent);
 		font-size: 1.2em;
 		font-weight: bold;
 		margin-bottom: 20px;
 		display: block;
 	}
 	
-	.level-content {
+	.stage-content {
 		transition: opacity 1s ease-in-out;
 	}
 	
 	.story-section {
 		margin-bottom: 20px;
 		padding: 15px;
-		border-left: 3px solid var(--terminal-success);
-		background-color: rgba(80, 250, 123, 0.05);
+		border-left: 3px solid var(--terminal-accent);
+		background-color: rgba(139, 233, 253, 0.05);
 	}
 	
-	.ascii-decoration {
+	.mission-objective {
+		margin-bottom: 20px;
+		padding: 15px;
+		border: 1px dashed var(--terminal-dim);
+		border-radius: 4px;
+	}
+	
+	.mission-objective h3 {
+		color: var(--terminal-warning);
+		margin-top: 0;
+	}
+	
+	/* Puzzle Slides */
+	.puzzle-container {
+		position: relative;
 		margin: 20px 0;
-		text-align: center;
-		color: var(--terminal-accent);
+		min-height: 300px;
+	}
+	
+	.puzzle-slide {
+		display: none;
+		opacity: 0;
+		transition: opacity 0.5s ease-in-out;
+	}
+	
+	.puzzle-slide.active {
+		display: block;
+		opacity: 1;
+		animation: glitchIn 0.8s ease-out;
+	}
+	
+	.puzzle-number {
+		color: var(--terminal-dim);
+		font-size: 0.8em;
+		margin-bottom: 10px;
+		text-align: right;
+	}
+	
+	.success-message {
+		color: var(--terminal-success);
+		margin: 20px 0;
+		padding: 15px;
+		border: 1px solid var(--terminal-success);
+		border-radius: 4px;
+		background-color: rgba(0, 255, 0, 0.1);
+		animation: glitchIn 0.8s ease-out;
+	}
+	
+	.hidden {
+		display: none;
 	}
 	
 	/* Glitch Animation */
@@ -177,17 +278,79 @@ import AsciiArt from '../components/AsciiArt.astro';
 
 <script>
 	document.addEventListener('DOMContentLoaded', () => {
-		// Show level content after title is typed
-		const levelTitle = document.querySelector('.level-title');
-		if (levelTitle) {
-			levelTitle.addEventListener('typingComplete', () => {
+		// Check if user should have access to this stage
+		const stage1Completed = localStorage.getItem('puzzle_start-puzzle') === 'solved';
+		if (!stage1Completed) {
+			window.location.href = '/';
+			return;
+		}
+		
+		// Show stage content after title is typed
+		const stageTitle = document.querySelector('.stage-title');
+		if (stageTitle) {
+			stageTitle.addEventListener('typingComplete', () => {
 				setTimeout(() => {
-					const levelContent = document.querySelector('.level-content');
-					if (levelContent) {
-						levelContent.style.opacity = '1';
+					const stageContent = document.querySelector('.stage-content');
+					if (stageContent) {
+						stageContent.style.opacity = '1';
 					}
 				}, 500);
 			});
 		}
+		
+		// Function to show next puzzle
+		window.nextPuzzle = (puzzleId) => {
+			// Add glitch effect to body
+			document.body.classList.add('glitch-transition');
+			
+			setTimeout(() => {
+				let currentPuzzle;
+				let nextPuzzle;
+				
+				if (puzzleId === 'cipher-puzzle') {
+					currentPuzzle = document.getElementById('puzzle-1');
+					nextPuzzle = document.getElementById('puzzle-2');
+				} else if (puzzleId === 'hash-puzzle') {
+					currentPuzzle = document.getElementById('puzzle-2');
+					nextPuzzle = document.getElementById('puzzle-3');
+				}
+				
+				if (currentPuzzle && nextPuzzle) {
+					currentPuzzle.classList.remove('active');
+					nextPuzzle.classList.add('active');
+				}
+				
+				// Trigger image reveal
+				const revealEvent = new CustomEvent('revealImage', { detail: { puzzleId } });
+				document.dispatchEvent(revealEvent);
+				
+				// Remove glitch effect
+				document.body.classList.remove('glitch-transition');
+			}, 1000);
+		};
+		
+		// Function to show final puzzle
+		window.showFinalPuzzle = (puzzleId) => {
+			// Add glitch effect to body
+			document.body.classList.add('glitch-transition');
+			
+			setTimeout(() => {
+				const currentPuzzle = document.getElementById('puzzle-3');
+				const finalPuzzle = document.getElementById('final-puzzle');
+				
+				if (currentPuzzle && finalPuzzle) {
+					currentPuzzle.classList.remove('active');
+					finalPuzzle.classList.remove('hidden');
+					finalPuzzle.scrollIntoView({ behavior: 'smooth' });
+				}
+				
+				// Trigger image reveal
+				const revealEvent = new CustomEvent('revealImage', { detail: { puzzleId } });
+				document.dispatchEvent(revealEvent);
+				
+				// Remove glitch effect
+				document.body.classList.remove('glitch-transition');
+			}, 1000);
+		};
 	});
 </script>

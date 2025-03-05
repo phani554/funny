@@ -2,16 +2,15 @@
 import Layout from '../layouts/Layout.astro';
 import CyberLayout from '../layouts/CyberLayout.astro';
 import TypedText from '../components/TypedText.astro';
+import PuzzleForm from '../components/PuzzleForm.astro';
 import AsciiArt from '../components/AsciiArt.astro';
-
-const baseUrl = import.meta.env.BASE_URL || '/cyber-scavenger-hunt';
 ---
 
 <Layout title="Stage 3 - Cyber Scavenger Hunt">
 	<CyberLayout>
 		<div class="terminal-container">
 			<div class="terminal-header">
-				<div class="terminal-title">TERMINAL ACCESS - LEVEL 3</div>
+				<div class="terminal-title">MISSION: FINAL STAGE</div>
 				<div class="terminal-controls">
 					<span class="control minimize"></span>
 					<span class="control maximize"></span>
@@ -22,39 +21,97 @@ const baseUrl = import.meta.env.BASE_URL || '/cyber-scavenger-hunt';
 			<div class="terminal-body">
 				<div class="terminal-line">
 					<span class="prompt">$</span>
-					<TypedText text="./access_level3.sh" delay={500} speed={70} />
+					<TypedText text="./final_mission.sh" delay={500} speed={70} />
 				</div>
 				
-				<div class="terminal-output">
-					<TypedText text="MISSION COMPLETE: TRAINING SUCCESSFUL" delay={2000} speed={30} className="level-title" />
+				<div class="terminal-output" id="stage3-content">
+					<TypedText text="FINAL MISSION: STOP THE PHANTOM ATTACK" delay={2000} speed={30} className="stage-title" />
 					
-					<div class="level-content" style="opacity: 0;">
-						<AsciiArt art="trophy" className="ascii-decoration" />
-						
-						<div class="success-section">
-							<p>🎉 <strong>CONGRATULATIONS, RECRUIT!</strong> 🎉</p>
-							<p>"Outstanding work!" Commander Hayes exclaims. "You've successfully completed all the training challenges."</p>
-							<p>"Your problem-solving skills and quick thinking would make you an excellent addition to our cybersecurity team. The Phantoms won't stand a chance against defenders like you."</p>
-							<p>"Remember, in the world of cybersecurity, knowledge is your strongest weapon. Keep learning, stay curious, and always be one step ahead of potential threats."</p>
+					<div class="stage-content" style="opacity: 0;">
+						<div class="story-section">
+							<p>🚨 <strong>URGENT SITUATION, RECRUIT!</strong> 🚨</p>
+							<p>"We've detected The Phantoms actively trying to break into the university network!" Commander Hayes says urgently. "We've captured some of their network traffic. You need to analyze it and identify what they're trying to do."</p>
+							<p>The commander pulls up a visualization of the captured network data.</p>
 						</div>
 						
-						<div class="certificate">
-							<h2>CERTIFICATE OF COMPLETION</h2>
-							<p>This certifies that</p>
-							<p class="certificate-name">CYBER RECRUIT</p>
-							<p>has successfully completed the</p>
-							<p class="certificate-course">CYBER DEFENSE TRAINING SIMULATION</p>
-							<p class="certificate-date">Date: <span id="current-date"></span></p>
+						<div class="mission-objective">
+							<h3>🎯 FINAL OBJECTIVE:</h3>
+							<p>Analyze the network traffic below and identify the security vulnerability The Phantoms are exploiting.</p>
 						</div>
 						
-						<div class="next-steps">
-							<h3>WHAT'S NEXT?</h3>
+						<AsciiArt placeholder="Network Traffic Visualization" />
+						
+						<div class="code-block">
+							<pre><code>
+USER: student_1234 connects to university-portal.edu
+TIME: 14:23:15
+ACTION: Entered username and password on login page
+RESULT: Login successful
+
+USER: student_1234 connects to university-portal.edu
+TIME: 15:45:22
+ACTION: Checked grades
+RESULT: Viewed personal grade information
+
+USER: student_1234 connects to university-portal.edu
+TIME: 16:30:05
+ACTION: Logged out
+
+USER: student_1234 connects to un1vers1ty-portal.edu
+TIME: 18:12:33
+ACTION: Entered username and password on login page
+RESULT: Data captured by unknown server
+							</code></pre>
+						</div>
+						
+						<div class="clue-section">
+							<h3>🔍 ANALYSIS CLUES:</h3>
 							<ul>
-								<li>Learn more about cybersecurity concepts</li>
-								<li>Explore other training simulations</li>
-								<li>Share your achievement with friends</li>
+								<li>Look carefully at the domain names in the traffic log</li>
+								<li>Notice the times and sequence of events</li>
+								<li>Think about what might happen if you entered your password on a fake website</li>
 							</ul>
-							<a href={baseUrl + "/"} class="restart-button">RESTART MISSION</a>
+						</div>
+						
+						<div class="final-puzzles">
+							<PuzzleForm 
+								id="packet-puzzle"
+								question="FINAL CHALLENGE: Based on the network traffic, what attack technique are The Phantoms using? (Hint: Look at the domain names carefully)"
+								hint="Notice how the domain name changed slightly in the last connection (the letter 'i' was replaced with the number '1'). This is a common technique where attackers create fake websites with URLs that look almost identical to legitimate ones."
+								answer="typosquatting"
+								onSuccess="showCongratulations"
+							/>
+						</div>
+						
+						<div id="congratulations" class="hidden">
+							<div class="success-banner">
+								<h2>🎉 MISSION ACCOMPLISHED! 🎉</h2>
+								<p>"Outstanding work, recruit!" Commander Hayes exclaims. "You've correctly identified that The Phantoms were using typosquatting - creating fake domains that look almost identical to real ones to trick users."</p>
+								<p>"Thanks to your quick analysis, we've blocked the fake domain and prevented a major data breach at the university."</p>
+								<p>Your training certification code: <span class="code">CYBER-DEFENDER-{Math.floor(Math.random() * 10000).toString().padStart(4, '0')}</span></p>
+							</div>
+							
+							<div class="next-steps">
+								<h3>🚀 NEXT STEPS IN YOUR CYBER JOURNEY:</h3>
+								<ul>
+									<li>Remember to always check website URLs carefully before entering passwords</li>
+									<li>Look for HTTPS and the lock icon in your browser</li>
+									<li>Be suspicious of unexpected login requests, even if the site looks familiar</li>
+									<li>Consider using a password manager to help identify fake websites</li>
+								</ul>
+								<a href="/" class="restart-btn">Start New Training Mission</a>
+							</div>
+							
+							<div class="learning-resources">
+								<h3>📚 WANT TO LEARN MORE?</h3>
+								<p>Check out these beginner-friendly cybersecurity resources:</p>
+								<ul>
+									<li>Cybersecurity and Infrastructure Security Agency (CISA) Tips</li>
+									<li>National Cyber Security Alliance's Stay Safe Online</li>
+									<li>Khan Academy's Internet Safety course</li>
+									<li>Codecademy's Introduction to Cybersecurity</li>
+								</ul>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -136,96 +193,137 @@ const baseUrl = import.meta.env.BASE_URL || '/cyber-scavenger-hunt';
 		margin-top: 20px;
 	}
 	
-	.level-title {
-		color: var(--terminal-success);
+	.stage-title {
+		color: var(--terminal-accent);
 		font-size: 1.2em;
 		font-weight: bold;
 		margin-bottom: 20px;
 		display: block;
 	}
 	
-	.level-content {
+	.stage-content {
 		transition: opacity 1s ease-in-out;
 	}
 	
-	.ascii-decoration {
-		margin: 20px 0;
-		text-align: center;
-		color: var(--terminal-warning);
-	}
-	
-	.success-section {
-		margin-bottom: 30px;
+	.story-section {
+		margin-bottom: 20px;
 		padding: 15px;
-		border-left: 3px solid var(--terminal-success);
-		background-color: rgba(80, 250, 123, 0.05);
-	}
-	
-	.certificate {
-		margin: 40px auto;
-		padding: 30px;
-		max-width: 600px;
-		border: 2px solid var(--terminal-accent);
-		text-align: center;
+		border-left: 3px solid var(--terminal-accent);
 		background-color: rgba(139, 233, 253, 0.05);
 	}
 	
-	.certificate h2 {
-		color: var(--terminal-accent);
-		margin-top: 0;
-		font-size: 1.5em;
-		letter-spacing: 2px;
-	}
-	
-	.certificate-name {
-		font-size: 1.3em;
-		color: var(--terminal-warning);
-		margin: 15px 0;
-		font-weight: bold;
-	}
-	
-	.certificate-course {
-		font-size: 1.1em;
-		color: var(--terminal-success);
-		margin: 15px 0;
-	}
-	
-	.certificate-date {
-		margin-top: 20px;
-		font-style: italic;
-		color: var(--terminal-dim);
-	}
-	
-	.next-steps {
-		margin-top: 30px;
+	.mission-objective {
+		margin-bottom: 20px;
 		padding: 15px;
 		border: 1px dashed var(--terminal-dim);
 		border-radius: 4px;
 	}
 	
-	.next-steps h3 {
+	.mission-objective h3 {
 		color: var(--terminal-warning);
 		margin-top: 0;
 	}
 	
+	.code-block {
+		background-color: rgba(0, 0, 0, 0.3);
+		border: 1px solid var(--terminal-dim);
+		border-radius: 4px;
+		padding: 15px;
+		margin: 20px 0;
+		overflow-x: auto;
+	}
+	
+	.code-block pre {
+		margin: 0;
+	}
+	
+	.clue-section {
+		background-color: rgba(241, 250, 140, 0.1);
+		border: 1px solid var(--terminal-warning);
+		border-radius: 4px;
+		padding: 15px;
+		margin: 20px 0;
+	}
+	
+	.clue-section h3 {
+		color: var(--terminal-warning);
+		margin-top: 0;
+	}
+	
+	.final-puzzles {
+		margin: 20px 0;
+	}
+	
+	.success-banner {
+		background-color: rgba(0, 255, 0, 0.1);
+		border: 1px solid var(--terminal-success);
+		border-radius: 4px;
+		padding: 20px;
+		margin: 20px 0;
+		animation: glitchIn 0.8s ease-out;
+	}
+	
+	.success-banner h2 {
+		color: var(--terminal-success);
+		margin-top: 0;
+		text-align: center;
+	}
+	
+	.code {
+		font-family: 'Courier New', monospace;
+		background-color: rgba(0, 0, 0, 0.3);
+		padding: 2px 5px;
+		border-radius: 3px;
+	}
+	
+	.next-steps {
+		margin: 20px 0;
+		padding: 15px;
+		border: 1px solid var(--terminal-accent);
+		border-radius: 4px;
+		background-color: rgba(139, 233, 253, 0.05);
+		animation: glitchIn 1s ease-out;
+	}
+	
+	.next-steps h3 {
+		color: var(--terminal-accent);
+		margin-top: 0;
+	}
+	
 	.next-steps ul {
-		padding-left: 20px;
 		margin-bottom: 20px;
 	}
 	
-	.restart-button {
-		display: inline-block;
-		background-color: var(--terminal-dim);
-		color: var(--terminal-text);
-		text-decoration: none;
-		padding: 10px 20px;
+	.learning-resources {
+		margin: 20px 0;
+		padding: 15px;
+		border: 1px solid var(--terminal-dim);
 		border-radius: 4px;
-		transition: all 0.3s ease;
+		animation: glitchIn 1.2s ease-out;
 	}
 	
-	.restart-button:hover {
+	.learning-resources h3 {
+		color: var(--terminal-accent);
+		margin-top: 0;
+	}
+	
+	.restart-btn {
+		display: inline-block;
 		background-color: var(--terminal-accent);
-		color: #000;
+		color: var(--terminal-bg);
+		padding: 10px 20px;
+		border-radius: 4px;
+		text-decoration: none;
+		font-weight: bold;
+		transition: background-color 0.3s;
+	}
+	
+	.restart-btn:hover {
+		background-color: var(--terminal-success);
+	}
+	
+	.hidden {
+		display: none;
 	}
 	
 	/* Glitch Animation */
@@ -257,25 +355,41 @@ const baseUrl = import.meta.env.BASE_URL || '/cyber-scavenger-hunt';
 
 <script>
 	document.addEventListener('DOMContentLoaded', () => {
-		// Set current date for certificate
-		const currentDateElement = document.getElementById('current-date');
-		if (currentDateElement) {
-			const now = new Date();
-			const options = { year: 'numeric', month: 'long', day: 'numeric' };
-			currentDateElement.textContent = now.toLocaleDateString('en-US', options);
+		// Check if user should have access to this stage
+		const stage2Completed = localStorage.getItem('puzzle_final-stage2-puzzle') === 'solved';
+		if (!stage2Completed) {
+			window.location.href = '/stage2';
+			return;
 		}
 		
-		// Show level content after title is typed
-		const levelTitle = document.querySelector('.level-title');
-		if (levelTitle) {
-			levelTitle.addEventListener('typingComplete', () => {
+		// Show stage content after title is typed
+		const stageTitle = document.querySelector('.stage-title');
+		if (stageTitle) {
+			stageTitle.addEventListener('typingComplete', () => {
 				setTimeout(() => {
-					const levelContent = document.querySelector('.level-content');
-					if (levelContent) {
-						levelContent.style.opacity = '1';
+					const stageContent = document.querySelector('.stage-content');
+					if (stageContent) {
+						stageContent.style.opacity = '1';
 					}
 				}, 500);
 			});
 		}
+		
+		// Function to show congratulations
+		window.showCongratulations = () => {
+			// Add glitch effect to body
+			document.body.classList.add('glitch-transition');
+			
+			setTimeout(() => {
+				const congratsSection = document.getElementById('congratulations');
+				if (congratsSection) {
+					congratsSection.classList.remove('hidden');
+					congratsSection.scrollIntoView({ behavior: 'smooth' });
+				}
+				
+				// Remove glitch effect
+				document.body.classList.remove('glitch-transition');
+			}, 1000);
+		};
 	});
 </script>

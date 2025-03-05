@@ -1,76 +1,46 @@
 ---
 interface Props {
-	placeholder?: string;
-	revealStages?: number;
+	placeholder: string;
+	revealStages: number;
 }
 
-const { placeholder = "[IMAGE]", revealStages = 1 } = Astro.props;
+const { placeholder, revealStages = 3 } = Astro.props;
 ---
 
 <div class="masked-image-container">
-	<div class="placeholder-text">{placeholder}</div>
-	<div class="image-reveal-container">
-		<div class="image-reveal" data-stages={revealStages}>
-			<!-- Image would be revealed here -->
-			<div class="image-stage stage-1 hidden">
-				<div class="ascii-art">
-					<pre>
-   _____                      _   _             
-  / ____|                    | | (_)            
- | |     _ __ _   _ _ __ ___ | |_ _  ___  _ __  
- | |    | '__| | | | '_ ` _ \| __| |/ _ \| '_ \ 
- | |____| |  | |_| | | | | | | |_| | (_) | | | |
-  \_____|_|   \__, |_| |_| |_|\__|_|\___/|_| |_|
-               __/ |                            
-              |___/                             
-					</pre>
-				</div>
-			</div>
-			<div class="image-stage stage-2 hidden">
-				<div class="ascii-art">
-					<pre>
-  _____                             _   _             
- / ____|                           | | (_)            
-| |     ___  _ __ ___  _ __  _   _ | |_ _  ___  _ __  
-| |    / _ \| '_ ` _ \| '_ \| | | || __| |/ _ \| '_ \ 
-| |___| (_) | | | | | | |_) | |_| || |_| | (_) | | | |
- \_____\___/|_| |_| |_| .__/ \__,_| \__|_|\___/|_| |_|
-                      | |                             
-                      |_|                             
-					</pre>
-				</div>
-			</div>
-			<div class="image-stage stage-3 hidden">
-				<div class="ascii-art">
-					<pre>
- _____  _     _     _     _             
-|  __ \| |   (_)   | |   (_)            
-| |__) | |__  _ ___| |__  _ _ __   __ _ 
-|  ___/| '_ \| / __| '_ \| | '_ \ / _` |
-| |    | | | | \__ \ | | | | | | | (_| |
-|_|    |_| |_|_|___/_| |_|_|_| |_|\__, |
-                                   __/ |
-                                  |___/ 
-					</pre>
-				</div>
-			</div>
+	<div class="masked-image">
+		<div class="image-placeholder">{placeholder}</div>
+		<div class="image-layers">
+			<div class="image-layer layer-1"></div>
+			<div class="image-layer layer-2"></div>
+			<div class="image-layer layer-3"></div>
 		</div>
+	</div>
+	<div class="image-status">
+		<div class="status-bar">
+			<div class="status-progress" id="image-progress"></div>
+		</div>
+		<div class="status-text">Decryption Progress: <span id="progress-text">0%</span></div>
 	</div>
 </div>
 
 <style>
 	.masked-image-container {
+		margin: 20px 0;
+		width: 100%;
+	}
+	
+	.masked-image {
 		position: relative;
 		width: 100%;
-		margin: 20px 0;
-		min-height: 150px;
+		height: 200px;
+		background-color: rgba(0, 0, 0, 0.3);
 		border: 1px solid var(--terminal-dim);
 		border-radius: 4px;
-		background-color: rgba(0, 0, 0, 0.3);
 		overflow: hidden;
 	}
 	
-	.placeholder-text {
+	.image-placeholder {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -80,110 +50,166 @@ const { placeholder = "[IMAGE]", revealStages = 1 } = Astro.props;
 		align-items: center;
 		justify-content: center;
 		color: var(--terminal-dim);
-		font-family: 'Courier New', monospace;
-		font-size: 1.2em;
-		text-align: center;
-		padding: 20px;
+		font-style: italic;
 		z-index: 1;
 	}
 	
-	.image-reveal-container {
-		position: relative;
-		width: 100%;
-		height: 100%;
-		z-index: 2;
-	}
-	
-	.image-reveal {
-		width: 100%;
-		height: 100%;
-	}
-	
-	.image-stage {
+	.image-layers {
 		position: absolute;
 		top: 0;
 		left: 0;
 		width: 100%;
 		height: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		z-index: 2;
+	}
+	
+	.image-layer {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-size: cover;
+		background-position: center;
 		opacity: 0;
 		transition: opacity 1s ease-in-out;
 	}
 	
-	.image-stage.visible {
-		opacity: 1;
+	.layer-1 {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23282a36'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-size='24' fill='%238be9fd'%3ELAYER 1 DECRYPTED%3C/text%3E%3C/svg%3E");
+		filter: blur(5px);
 	}
 	
-	.hidden {
-		display: none;
+	.layer-2 {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23282a36'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-size='24' fill='%238be9fd'%3ELAYER 2 DECRYPTED%3C/text%3E%3C/svg%3E");
+		filter: blur(3px);
 	}
 	
-	.ascii-art {
-		color: var(--terminal-accent);
-		font-size: 0.7em;
-		line-height: 1.2;
-		text-align: center;
-		padding: 20px;
+	.layer-3 {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200' viewBox='0 0 400 200'%3E%3Crect width='400' height='200' fill='%23282a36'/%3E%3Ctext x='50%25' y='30%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-size='24' fill='%23ff5555'%3EWARNING:%3C/text%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-size='20' fill='%23f8f8f2'%3EPHISHING ATTACK DETECTED%3C/text%3E%3Ctext x='50%25' y='70%25' dominant-baseline='middle' text-anchor='middle' font-family='monospace' font-size='16' fill='%23f1fa8c'%3EFake login page identified%3C/text%3E%3C/svg%3E");
+	}
+	
+	.image-status {
+		margin-top: 10px;
+	}
+	
+	.status-bar {
 		width: 100%;
-		overflow-x: auto;
+		height: 10px;
+		background-color: rgba(0, 0, 0, 0.3);
+		border-radius: 5px;
+		overflow: hidden;
 	}
 	
-	.ascii-art pre {
-		margin: 0;
-		display: inline-block;
-		text-align: left;
+	.status-progress {
+		height: 100%;
+		width: 0%;
+		background-color: var(--terminal-accent);
+		transition: width 1s ease-in-out;
 	}
 	
-	/* Responsive adjustments */
-	@media (max-width: 768px) {
-		.ascii-art {
-			font-size: 0.5em;
-		}
+	.status-text {
+		margin-top: 5px;
+		font-size: 0.8em;
+		color: var(--terminal-dim);
+		text-align: right;
 	}
 </style>
 
 <script>
-	document.addEventListener('astro:page-load', () => {
-		const imageReveal = document.querySelector('.image-reveal');
-		if (!imageReveal) return;
+	document.addEventListener('DOMContentLoaded', () => {
+		const progressBar = document.getElementById('image-progress');
+		const progressText = document.getElementById('progress-text');
+		const layers = document.querySelectorAll('.image-layer');
+		const totalLayers = layers.length;
+		let revealedLayers = 0;
 		
-		const stages = parseInt(imageReveal.getAttribute('data-stages') || '1', 10);
-		const placeholder = document.querySelector('.placeholder-text');
-		
-		// Listen for puzzle solved events
+		// Listen for reveal events
 		document.addEventListener('revealImage', (event) => {
-			const puzzleId = event.detail.puzzleId;
-			let stageNum = 0;
-			
-			// Determine which stage to reveal based on puzzle ID
-			if (puzzleId === 'cipher-puzzle') {
-				stageNum = 1;
-			} else if (puzzleId === 'hash-puzzle') {
-				stageNum = 2;
-			} else if (puzzleId === 'key-puzzle') {
-				stageNum = 3;
-			}
-			
-			if (stageNum > 0 && stageNum <= stages) {
-				// Hide placeholder if first stage
-				if (stageNum === 1 && placeholder) {
-					placeholder.style.opacity = '0';
+			if (revealedLayers < totalLayers) {
+				revealedLayers++;
+				
+				// Update progress bar
+				const progress = (revealedLayers / totalLayers) * 100;
+				if (progressBar) progressBar.style.width = `${progress}%`;
+				if (progressText) progressText.textContent = `${Math.round(progress)}%`;
+				
+				// Reveal layer with glitch effect
+				const layer = layers[revealedLayers - 1];
+				if (layer) {
+					// Add glitch effect
+					layer.style.clipPath = 'inset(0 0 0 0)';
+					layer.style.animation = 'none';
+					
+					// Force reflow
+					void layer.offsetWidth;
+					
+					// Add glitch animation
+					layer.style.animation = 'layerGlitch 0.5s ease-out';
+					
+					// Show layer
 					setTimeout(() => {
-						placeholder.style.display = 'none';
-					}, 1000);
+						layer.style.opacity = '1';
+					}, 100);
 				}
 				
-				// Show the stage
-				const stage = document.querySelector(`.stage-${stageNum}`);
-				if (stage) {
-					stage.classList.remove('hidden');
-					setTimeout(() => {
-						stage.classList.add('visible');
-					}, 100);
+				// If all layers revealed, hide placeholder
+				if (revealedLayers === totalLayers) {
+					const placeholder = document.querySelector('.image-placeholder');
+					if (placeholder) {
+						placeholder.style.opacity = '0';
+					}
 				}
 			}
 		});
 	});
 </script>
+
+<style is:global>
+	@keyframes layerGlitch {
+		0% {
+			clip-path: inset(0 0 100% 0);
+			transform: translateX(-5px);
+		}
+		10% {
+			clip-path: inset(10% 0 80% 0);
+			transform: translateX(5px);
+		}
+		20% {
+			clip-path: inset(30% 0 50% 0);
+			transform: translateX(-5px);
+		}
+		30% {
+			clip-path: inset(50% 0 30% 0);
+			transform: translateX(5px);
+		}
+		40% {
+			clip-path: inset(70% 0 10% 0);
+			transform: translateX(-5px);
+		}
+		50% {
+			clip-path: inset(10% 0 90% 0);
+			transform: translateX(5px);
+		}
+		60% {
+			clip-path: inset(40% 0 30% 0);
+			transform: translateX(-5px);
+		}
+		70% {
+			clip-path: inset(30% 0 60% 0);
+			transform: translateX(5px);
+		}
+		80% {
+			clip-path: inset(20% 0 70% 0);
+			transform: translateX(-5px);
+		}
+		90% {
+			clip-path: inset(10% 0 50% 0);
+			transform: translateX(5px);
+		}
+		100% {
+			clip-path: inset(0 0 0 0);
+			transform: translateX(0);
+		}
+	}
+</style>

@@ -3,8 +3,6 @@ import Layout from '../layouts/Layout.astro';
 import CyberLayout from '../layouts/CyberLayout.astro';
 import TypedText from '../components/TypedText.astro';
 import PuzzleForm from '../components/PuzzleForm.astro';
-
-const baseUrl = import.meta.env.BASE_URL || '/cyber-scavenger-hunt';
 ---
 
 <Layout title="Cyber Scavenger Hunt">
@@ -12,7 +10,7 @@ const baseUrl = import.meta.env.BASE_URL || '/cyber-scavenger-hunt';
 		<!-- Intro Video Container -->
 		<div id="intro-video-container" class="video-container">
 			<video id="intro-video" class="fullscreen-video" preload="auto">
-				<source src={`${baseUrl}/intro.mp4`} type="video/mp4">
+				<source src="/intro.mp4" type="video/mp4">
 				Your browser does not support the video tag.
 			</video>
 			<div class="video-overlay">
@@ -259,12 +257,6 @@ const baseUrl = import.meta.env.BASE_URL || '/cyber-scavenger-hunt';
 		const introContainer = document.getElementById('intro-video-container');
 		const mainContent = document.getElementById('main-content');
 		const skipButton = document.getElementById('skip-intro');
-		
-		// Show main content immediately for testing
-		if (mainContent && introContainer) {
-			introContainer.classList.add('hidden');
-			mainContent.classList.remove('hidden');
-		}
 		
 		// Function to show main content
 		const showMainContent = () => {
